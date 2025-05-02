@@ -1,4 +1,4 @@
-from datasets import cityescapes as ce
+from datasets import cityscapes as ce
 from transforms import transforms as t
 # Directory delle immagini e delle maschere
 images_dir = "../data/images/test/berlin"

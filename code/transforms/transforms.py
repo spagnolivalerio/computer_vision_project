@@ -3,12 +3,8 @@ import torch
 from torchvision import transforms
 
 def img_transform(image):
-    """
-    Funzione che applica trasformazioni alle immagini per OpenCV.
-    L'immagine deve essere già in formato RGB.
-    """
     # Resize immagine
-    image = cv2.resize(image, (1024, 512))  # Cambia la dimensione come nel tuo esempio
+    image = cv2.resize(image, (1024, 512))
 
     # Converti l'immagine in un tensore PyTorch
     image = torch.from_numpy(image.transpose((2, 0, 1)))  # PyTorch works with (C, H, W)
