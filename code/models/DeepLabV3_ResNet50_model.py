@@ -10,3 +10,6 @@ model = model.cuda()
 
 criterion = nn.CrossEntropyLoss(ignore_index=255)
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+
+mymodel = torchvision.models.segmentation.deeplabv3_resnet50(weights = None, aux_loss = True)
+mymodel.classifier[4] = nn.Conv2d(256, 19, kernel_size=1)

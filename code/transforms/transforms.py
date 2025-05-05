@@ -11,7 +11,6 @@ CITYSCAPES_ID_TO_TRAINID = {
 }
 
 def map_to_train_ids(mask):
-    # Converti PIL → numpy → mappa valori → torch.Tensor
     mask = np.array(mask)
     mapped = np.full_like(mask, 255)
     for k, v in CITYSCAPES_ID_TO_TRAINID.items():
