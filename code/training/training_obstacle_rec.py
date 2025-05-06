@@ -1,5 +1,15 @@
+import torch.nn.functional as F
+import torch
 
-def train_one_epoch(model, dataloader, optimizer, criterion, device):
+def custom_bce_loss(logits, target, ignore_index=19, reduction='mean'):
+
+    mask = target != ignore_index 
+    
+    loss = F.binary_cross_entropy_with_logits(logits[mask], target[mask].float(), reduction=reduction)
+
+    return loss
+
+def train_one_epoch_obstacle_rec(model, dataloader, optimizer, device):
 
     model = model.to(device)
     model.train()
@@ -14,7 +24,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device):
         optimizer.zero_grad()
 
         out = model(img)['out']
-        loss = criterion(out, target)
+        loss = custom_bce_loss(out, target)
         loss.backward()
         optimizer.step()
         total_loss = total_loss + loss.item()
