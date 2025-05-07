@@ -46,7 +46,7 @@ evaluate(RN50.model, val_dataloader, device=device)
 """
 model = BBRN50.model
 model.load_state_dict(torch.load("models/weights/OBSTACLE_epoch3.pth"))
-evaluate_obstacle_rec_model(model, val_dataloader, device=device, channel=19, treshold=0.4)
+evaluate_obstacle_rec_model(model, val_dataloader, device=device, channel=19, treshold=0.5)
 """
 for epoch in range(NUM_EPOCHS):
     loss = train(model, train_dataloader, BBRN50.optimizer, device=device)

@@ -53,9 +53,6 @@ def evaluate(model, dataloader, device):
         show_batch(batch = batch, palette = PALETTE)
         
 
-        
-import torch.nn.functional as F
-
 def evaluate_obstacle_rec_model(model, dataloader, device, channel, treshold):
 
     model = model.to(device)
