@@ -1,6 +1,6 @@
 import torch
 import random
-from utils.utils import show_batch, show_batch2
+from utils.utils import show_batch, show_channel_batch
 
 PALETTE = {
     0: (128, 64, 128),
@@ -56,7 +56,7 @@ def evaluate(model, dataloader, device):
         
 import torch.nn.functional as F
 
-def evaluate2(model, dataloader, device):
+def evaluate_obstacle_rec_model(model, dataloader, device, channel, treshold):
 
     model = model.to(device)
     model.eval()
@@ -82,4 +82,4 @@ def evaluate2(model, dataloader, device):
         ran_ind = random.randint(0, len(imgs) - 1)
 
         batch = (imgs[ran_ind], preds[ran_ind], targets[ran_ind])
-        show_batch2(batch=batch, palette=PALETTE)
+        show_channel_batch(batch=batch, channel=channel, treshold=treshold)

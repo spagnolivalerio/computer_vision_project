@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from models import DeepLabV3_ResNet50_model as RN50
 from models import Backbone_ResNet50_for_obstacle_rec as BBRN50
 from training.training import train_one_epoch
-from evaluation.evaluation import evaluate2
+from evaluation.evaluation import evaluate_obstacle_rec_model
 from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
 from training.training_obstacle_rec import train_one_epoch_obstacle_rec as train
 from datasets.Cityscapes_with_objectness import CityScapes as City
@@ -45,8 +45,8 @@ evaluate(RN50.model, val_dataloader, device=device)
 
 """
 model = BBRN50.model
-model.load_state_dict(torch.load("models/OBSTACLE_epoch3.pth"))
-evaluate2(model, val_dataloader, device=device)
+model.load_state_dict(torch.load("models/weights/OBSTACLE_epoch3.pth"))
+evaluate_obstacle_rec_model(model, val_dataloader, device=device, channel=19, treshold=0.4)
 """
 for epoch in range(NUM_EPOCHS):
     loss = train(model, train_dataloader, BBRN50.optimizer, device=device)

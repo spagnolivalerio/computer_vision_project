@@ -10,8 +10,6 @@ from torchvision.datasets import Cityscapes
 from torch.utils.data import DataLoader
 from torchvision.utils import make_grid
 from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
-import numpy as np
-from tqdm import tqdm
 
 OBJECTS = [5, 11, 12, 13, 14, 15, 16, 17, 18]
 
