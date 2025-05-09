@@ -1,11 +1,10 @@
 import torch.nn.functional as F
 import torch
 
-def custom_bce_loss(logits, target, ignore_index=19, reduction='mean'):
+def custom_bce_loss(logits, target, reduction='mean'):
 
-    mask = target != ignore_index 
     
-    loss = F.binary_cross_entropy_with_logits(logits[mask], target[mask].float(), reduction=reduction)
+    loss = F.binary_cross_entropy_with_logits(logits, target.float(), reduction=reduction)
 
     return loss
 

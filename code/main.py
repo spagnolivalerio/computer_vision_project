@@ -42,9 +42,10 @@ torch.save(model.state_dict(), "models/RN50_epoch5.pth")
 RN50.model.load_state_dict(torch.load("models/RN50_epoch5.pth"))
 
 evaluate(RN50.model, val_dataloader, device=device)
-
 """
+
 model = BBRN50.model
+
 model.load_state_dict(torch.load("models/weights/OBSTACLE_epoch3.pth"))
 evaluate_obstacle_rec_model(model, val_dataloader, device=device, channel=19, treshold=0.5)
 """
@@ -52,5 +53,5 @@ for epoch in range(NUM_EPOCHS):
     loss = train(model, train_dataloader, BBRN50.optimizer, device=device)
     print(f"Epoch {epoch+1}/{NUM_EPOCHS} - Loss: {loss:.4f}")
 
-torch.save(model.state_dict(), "models/OBSTACLE_epoch3.pth")
+torch.save(model.state_dict(), "models/weights/OBSTACLE_epoch3.pth")
 """

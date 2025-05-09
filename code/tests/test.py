@@ -7,6 +7,19 @@ import torchvision
 import torch.nn as nn
 import numpy as np
 
+
+def get_img(tensor, channel): # The function takes as input a tensor of shape (C, H, W) and return a numpy binary vector related to the specific channel
+
+    if tensor.shape[0] == 1:
+        tensor = tensor.squeeze(0)
+
+    mask = tensor[channel].cpu().numpy()
+
+    h, w = mask.shape
+    img = np.zeros((h, w, 3), dtype = np.uint8)
+
+    return img
+
 # Carica il modello con i pesi predefiniti
 weights = DeepLabV3_ResNet50_Weights.DEFAULT
 model = torchvision.models.segmentation.deeplabv3_resnet50(weights=weights)
@@ -42,6 +55,7 @@ output_tensor = output_tensor.squeeze(0)
 # Applica sigmoid per ottenere probabilità
 prob = torch.sigmoid(output_tensor)
 
+
 # Funzione per calcolare il complemento delle probabilità
 def anomalies_map(tensor):  # Tensor of shape (C, H, W)
     # Calcola il complemento delle probabilità
@@ -59,9 +73,12 @@ def anomalies_map(tensor):  # Tensor of shape (C, H, W)
 map = anomalies_map(prob)
 
 # Assicurati che la mappa sia 2D per visualizzarla correttamente
-map = map.squeeze()  # Rimuovi dimensioni inutili, la forma dovrebbe essere (H, W)
+map = map.squeeze()
+masked_map = map.copy()
+#   masked_map[masked_map <= 0.45] = 0  # oppure np.nan per trasparenza
 
-# Visualizza la mappa delle anomalie
-plt.imshow(map, cmap='jet')  # Usa una palette di colori come 'jet' per visualizzare la mappa
-plt.colorbar()  # Aggiungi una barra del colore per interpretare la mappa
+plt.imshow(masked_map, cmap="jet")
+plt.colorbar()
+plt.title("Pixel con valore > 0.8")
+plt.axis("off")
 plt.show()
