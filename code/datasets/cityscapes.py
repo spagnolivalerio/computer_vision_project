@@ -11,7 +11,6 @@ from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet
 import numpy as np
 from tqdm import tqdm
 
-
 CITYSCAPES_ID_TO_TRAINID = {
     0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 0,
     8: 1, 9: 255, 10: 255, 11: 2, 12: 3, 13: 4, 14: 255, 15: 255,

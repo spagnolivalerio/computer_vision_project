@@ -1,12 +1,18 @@
 import torch.nn.functional as F
 import torch
 
-def custom_bce_loss(logits, target, reduction='mean'):
+def custom_bce_loss(logits, target, ignore_mask):
 
-    
-    loss = F.binary_cross_entropy_with_logits(logits, target.float(), reduction=reduction)
+    target = target.float()
+    ignore_mask = ignore_mask.float() 
 
-    return loss
+    raw_loss = F.binary_cross_entropy_with_logits(logits, target, reduction='none') 
+
+    mask = ignore_mask.expand_as(logits)  
+
+    masked_loss = raw_loss * mask
+
+    return masked_loss.sum() / mask.sum().clamp(min=1.0)
 
 def train_one_epoch_obstacle_rec(model, dataloader, optimizer, device):
 
@@ -15,15 +21,16 @@ def train_one_epoch_obstacle_rec(model, dataloader, optimizer, device):
     total_loss = 0.0
     num_batches = len(dataloader)
 
-    for batch_id, (img, target) in enumerate(dataloader, start=1):
+    for batch_id, (img, target, ignore_mask) in enumerate(dataloader, start=1):
 
+        ignore_mask = ignore_mask.to(device)
         img = img.to(device)
         target = target.to(device)
 
         optimizer.zero_grad()
 
         out = model(img)['out']
-        loss = custom_bce_loss(out, target)
+        loss = custom_bce_loss(out, target, ignore_mask)
         loss.backward()
         optimizer.step()
         total_loss = total_loss + loss.item()

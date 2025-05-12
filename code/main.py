@@ -20,14 +20,14 @@ data_root = "../data"
 # Creation of cityscapes dataset picking imgs for semantic segmentation task, applying data trasformations.
 train_dataset = City(root = data_root, split = "train", mode = "fine", target_type= "semantic", target_transform = T.target_trasform, transform = T.trasform)
 
-val_dataset = Cityscapes(root = data_root, split = "val", mode = "fine", target_type= "semantic", target_transform = T.target_trasform, transform = T.trasform)
+#val_dataset = Cityscapes(root = data_root, split = "val", mode = "fine", target_type= "semantic", target_transform = T.target_trasform, transform = T.trasform)
 
 #test_dataset = Cityscapes(root = data_root, split = "test", mode = "fine", target_type= "semantic", target_transform = T.target_trasform, transform = T.trasform)
 
 # DataLoader creation
 train_dataloader = DataLoader(train_dataset, batch_size = 8, shuffle = True, num_workers = 4)
 
-val_dataloader = DataLoader(val_dataset, batch_size = 8, shuffle = True, num_workers = 4)
+#val_dataloader = DataLoader(val_dataset, batch_size = 8, shuffle = True, num_workers = 4)
 
 #test_dataloader = DataLoader(test_dataset, batch_size = 8, shuffle = True, num_workers = 4)
 
@@ -43,15 +43,18 @@ RN50.model.load_state_dict(torch.load("models/RN50_epoch5.pth"))
 
 evaluate(RN50.model, val_dataloader, device=device)
 """
-
+"""
 model = BBRN50.model
 
 model.load_state_dict(torch.load("models/weights/OBSTACLE_epoch3.pth"))
 evaluate_obstacle_rec_model(model, val_dataloader, device=device, channel=19, treshold=0.5)
 """
+
+model = BBRN50.model
+
 for epoch in range(NUM_EPOCHS):
     loss = train(model, train_dataloader, BBRN50.optimizer, device=device)
     print(f"Epoch {epoch+1}/{NUM_EPOCHS} - Loss: {loss:.4f}")
 
-torch.save(model.state_dict(), "models/weights/OBSTACLE_epoch3.pth")
-"""
+torch.save(model.state_dict(), "models/weights/OBSTACLE_epoch3_laf_version2.pth")
+

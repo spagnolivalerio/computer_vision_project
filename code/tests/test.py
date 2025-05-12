@@ -29,7 +29,7 @@ model.classifier[-1] = nn.Conv2d(model.classifier[-1].in_channels, 20, kernel_si
 model = model.cuda()
 
 # Carica i pesi del modello addestrato
-model.load_state_dict(torch.load('../models/weights/OBSTACLE_epoch3.pth'))  # Sostituisci con il percorso corretto
+model.load_state_dict(torch.load('../models/weights/OBSTACLE_epoch3_laf_version2.pth'))  # Sostituisci con il percorso corretto
 model.eval()  # Imposta il modello in modalità di valutazione
 
 # Definisci le trasformazioni (devono essere le stesse usate per allenare il modello)
@@ -57,17 +57,15 @@ prob = torch.sigmoid(output_tensor)
 
 
 # Funzione per calcolare il complemento delle probabilità
-def anomalies_map(tensor):  # Tensor of shape (C, H, W)
-    # Calcola il complemento delle probabilità
-    complement = 1.0 - tensor  # Complemento delle probabilità
+def anomalies_map(prob):
+    obj = prob[-1]         # shape (H, W)
+    known = prob[:-1]      # shape (K, H, W)
 
-    # Calcola la "produttoria delle probabilità complementari" per ogni pixel lungo le classi (C)
-    product_of_complements = torch.prod(complement, dim=0)  # (H, W), la moltiplicazione lungo la dimensione C
+    unknown = torch.prod(1.0 - known, dim=0)   # pixel-wise unknown score
+    uo_map = obj * unknown                     # final UO score
 
-    # Convertiamo la mappa in numpy per la visualizzazione
-    anomalies_map = product_of_complements.cpu().numpy()
+    return uo_map.cpu().numpy()
 
-    return anomalies_map
 
 # Calcola la mappa delle anomalie (complemento delle probabilità)
 map = anomalies_map(prob)
@@ -79,6 +77,5 @@ masked_map = map.copy()
 
 plt.imshow(masked_map, cmap="jet")
 plt.colorbar()
-plt.title("Pixel con valore > 0.8")
 plt.axis("off")
 plt.show()
