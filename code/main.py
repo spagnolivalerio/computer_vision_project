@@ -14,7 +14,7 @@ from datasets.Cityscapes_with_objectness import CityScapes as City
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-NUM_EPOCHS = 3
+NUM_EPOCHS = 4
 data_root = "../data"
 
 # Creation of cityscapes dataset picking imgs for semantic segmentation task, applying data trasformations.
@@ -25,7 +25,7 @@ train_dataset = City(root = data_root, split = "train", mode = "fine", target_ty
 #test_dataset = Cityscapes(root = data_root, split = "test", mode = "fine", target_type= "semantic", target_transform = T.target_trasform, transform = T.trasform)
 
 # DataLoader creation
-train_dataloader = DataLoader(train_dataset, batch_size = 8, shuffle = True, num_workers = 4)
+train_dataloader = DataLoader(train_dataset, batch_size = 4, shuffle = True, num_workers = 4)
 
 #val_dataloader = DataLoader(val_dataset, batch_size = 8, shuffle = True, num_workers = 4)
 
@@ -56,5 +56,5 @@ for epoch in range(NUM_EPOCHS):
     loss = train(model, train_dataloader, BBRN50.optimizer, device=device)
     print(f"Epoch {epoch+1}/{NUM_EPOCHS} - Loss: {loss:.4f}")
 
-torch.save(model.state_dict(), "models/weights/OBSTACLE_epoch3_laf_version2.pth")
+torch.save(model.state_dict(), "models/weights/bs=4-weights=1.6.pth")
 

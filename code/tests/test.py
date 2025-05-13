@@ -29,7 +29,7 @@ model.classifier[-1] = nn.Conv2d(model.classifier[-1].in_channels, 20, kernel_si
 model = model.cuda()
 
 # Carica i pesi del modello addestrato
-model.load_state_dict(torch.load('../models/weights/OBSTACLE_epoch3_laf_version2.pth'))  # Sostituisci con il percorso corretto
+model.load_state_dict(torch.load('../models/weights/bs=4-weights=2.0.pth'))  # Sostituisci con il percorso corretto
 model.eval()  # Imposta il modello in modalità di valutazione
 
 # Definisci le trasformazioni (devono essere le stesse usate per allenare il modello)
@@ -75,7 +75,7 @@ map = map.squeeze()
 masked_map = map.copy()
 #   masked_map[masked_map <= 0.45] = 0  # oppure np.nan per trasparenza
 
-plt.imshow(masked_map, cmap="jet")
+plt.imshow(map, cmap="jet")
 plt.colorbar()
 plt.axis("off")
 plt.show()

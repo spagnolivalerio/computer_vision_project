@@ -9,8 +9,9 @@ def custom_bce_loss(logits, target, ignore_mask):
     raw_loss = F.binary_cross_entropy_with_logits(logits, target, reduction='none') 
 
     mask = ignore_mask.expand_as(logits)  
-
-    masked_loss = raw_loss * mask
+    weights = torch.ones_like(raw_loss)
+    weights[:, 19][target[:, 19] == 1] = 1.6
+    masked_loss = raw_loss * mask * weights
 
     return masked_loss.sum() / mask.sum().clamp(min=1.0)
 

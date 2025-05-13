@@ -28,24 +28,26 @@ class CityScapes(Cityscapes):
             targets.append(target)
 
         target = tuple(targets) if len(targets) > 1 else targets[0]  # type: ignore[assignment]
+        target_filename = os.path.basename(self.targets[index][0])
 
         if self.transforms is not None:
             image, target = self.transforms(image, target)
-            target, ignore_mask = to_one_hot_plus_one(target=target)
+            target, ignore_mask = to_one_hot_plus_one(target, target_filename)
             
         return image, target, ignore_mask
     
 def merge_and_remove(tensor):
 
-    assert tensor.shape[0] > 19
+    assert tensor.shape[0] > 20
 
     tensor[19] = torch.logical_or(tensor[19], tensor[20]).to(tensor.dtype)
+    
 
     tensor = torch.cat((tensor[:20], tensor[21:]), dim=0)
 
     return tensor
 
-def to_one_hot_plus_one(target):
+def to_one_hot_plus_one(target, file):
 
     target = target.squeeze()
     ignore_mask = (target != 19).float().unsqueeze(0)
@@ -59,5 +61,7 @@ def to_one_hot_plus_one(target):
     
     one_hot = merge_and_remove(one_hot)
 
-
+    """ plt.imshow(one_hot[19].squeeze(0).cpu())
+    plt.show()"""
+    
     return one_hot, ignore_mask

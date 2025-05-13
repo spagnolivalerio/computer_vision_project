@@ -1,3 +1,4 @@
 .env1/
 data/
 code/models/weights/
+code/utils/to_gtfine
