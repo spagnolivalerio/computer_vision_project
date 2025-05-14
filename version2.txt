@@ -1,0 +1,2 @@
+Version2 of cv project. In this version we are going to implement exactly the
+relted paper, changing optimizer and complexity of the work (from 19 to 7 classes).
