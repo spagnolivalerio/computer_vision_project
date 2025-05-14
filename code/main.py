@@ -53,8 +53,8 @@ evaluate_obstacle_rec_model(model, val_dataloader, device=device, channel=19, tr
 model = BBRN50.model
 
 for epoch in range(NUM_EPOCHS):
-    loss = train(model, train_dataloader, BBRN50.optimizer, device=device)
+    loss = train(model, train_dataloader, BBRN50.optimizer, device=device, epoch=epoch, totepochs=NUM_EPOCHS)
     print(f"Epoch {epoch+1}/{NUM_EPOCHS} - Loss: {loss:.4f}")
 
-torch.save(model.state_dict(), "models/weights/bs=4-weights=1.6.pth")
+torch.save(model.state_dict(), "models/weights/SGD-boundary-aware.pth")
 
