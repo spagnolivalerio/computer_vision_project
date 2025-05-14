@@ -56,5 +56,5 @@ for epoch in range(NUM_EPOCHS):
     loss = train(model, train_dataloader, BBRN50.optimizer, device=device, epoch=epoch,totepochs=NUM_EPOCHS)
     print(f"Epoch {epoch+1}/{NUM_EPOCHS} - Loss: {loss:.4f}")
 
-torch.save(model.state_dict(), "models/weights/SGD-boundary-aware-bs=4-weights=1.5.pth")
+torch.save(model.state_dict(), "models/weights/finaltest.pth")
 

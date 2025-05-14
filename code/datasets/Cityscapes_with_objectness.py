@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from torchvision.utils import make_grid
 from torchvision.models.segmentation import deeplabv3_resnet50, DeepLabV3_ResNet50_Weights
 
-OBJECTS = [5, 11, 12, 13, 14, 15, 16, 17, 18]
+OBJECTS = [5]
 
 class CityScapes(Cityscapes):
     def __getitem__(self, index):
@@ -35,33 +35,12 @@ class CityScapes(Cityscapes):
             target, ignore_mask = to_one_hot_plus_one(target, target_filename)
             
         return image, target, ignore_mask
-    
-def merge_and_remove(tensor):
-
-    assert tensor.shape[0] > 20
-
-    tensor[19] = torch.logical_or(tensor[19], tensor[20]).to(tensor.dtype)
-    
-
-    tensor = torch.cat((tensor[:20], tensor[21:]), dim=0)
-
-    return tensor
 
 def to_one_hot_plus_one(target, file):
 
     target = target.squeeze()
-    ignore_mask = (target != 19).float().unsqueeze(0)
-    one_hot = torch.nn.functional.one_hot(target, num_classes = 21).permute(2, 0, 1)
-    one_hot[19] = 0
-
-    for channel in OBJECTS:
-
-        pos = one_hot[channel] == 1
-        one_hot[19][pos] = 1
-    
-    one_hot = merge_and_remove(one_hot)
-
-    """ plt.imshow(one_hot[19].squeeze(0).cpu())
-    plt.show()"""
+    ignore_mask = (target != 6).float().unsqueeze(0)
+    one_hot = torch.nn.functional.one_hot(target, num_classes = 7).permute(2, 0, 1)
+    one_hot = torch.cat((one_hot[:5], one_hot[6:]), dim=0)
     
     return one_hot, ignore_mask

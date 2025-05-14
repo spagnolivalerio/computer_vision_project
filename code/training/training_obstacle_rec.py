@@ -28,7 +28,7 @@ def custom_bce_loss(logits, target, ignore_mask, lambda_weight=3.0):
     # Maschera per pixel validi
     mask = ignore_mask.expand_as(raw_loss)
     weights = torch.ones_like(raw_loss)
-    weights[:, 19][target[:, 19] == 1] = 1.5
+    weights[:, 2][target[:, 2] == 1] = 2.0
     # ------------------------
     # STANDARD LOSS (BCE masked)
     std_loss = raw_loss * mask * weights
@@ -36,7 +36,7 @@ def custom_bce_loss(logits, target, ignore_mask, lambda_weight=3.0):
 
     # ------------------------
     # BOUNDARY LOSS (solo canale object 19)
-    boundary_mask = get_boundary_mask(target[:, 19:20])  # (B, 1, H, W)
+    boundary_mask = get_boundary_mask(target[:, 2:3])  # (B, 1, H, W)
     boundary_mask_exp = boundary_mask.expand_as(raw_loss)
 
     # Applica anche ignore_mask ai bordi

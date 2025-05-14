@@ -8,9 +8,9 @@ import torch.nn as nn
 import numpy as np
 
 # === PARAMETRI CHIAVE ===
-OBJECT_CHANNEL_INDEX = 19  # Cambia se il canale oggetto è altrove
-NUM_CLASSES = 20           # Numero di classi (escluso ignore)
-WEIGHTS_PATH = '../models/weights/SGD-boundary-aware-bs=4-weights=2.0.pth'
+OBJECT_CHANNEL_INDEX = 6  # Cambia se il canale oggetto è altrove
+NUM_CLASSES = 7           # Numero di classi (escluso ignore)
+WEIGHTS_PATH = '../models/weights/low_complexity-SGD-boundary-aware-bs=4-weights=2.0-4.pth'
 IMAGE_PATH = 'test.png'
 
 # === MODELLO ===
@@ -38,7 +38,7 @@ with torch.no_grad():
 # === FUNZIONE: mappa UO ===
 def anomalies_map(prob):
     obj = prob[OBJECT_CHANNEL_INDEX]        # oggetto
-    known = torch.cat([prob[:OBJECT_CHANNEL_INDEX], prob[OBJECT_CHANNEL_INDEX+1:]], dim=0)
+    known = prob[:6]
     unknown = torch.prod(1.0 - known, dim=0)
     uo_map = obj * unknown
     return uo_map.cpu().numpy()
@@ -48,7 +48,7 @@ uo_map = anomalies_map(prob)
 uo_map = uo_map.squeeze()
 
 # Visualizza solo dove il valore è significativo
-mask = uo_map > 0.8 * uo_map.max()
+mask = uo_map > 0.5 * uo_map.max()
 masked_map = np.zeros_like(uo_map)
 masked_map[mask] = uo_map[mask]
 
@@ -64,7 +64,3 @@ plt.title("Object Channel Prediction")
 plt.colorbar()
 plt.axis("off")
 plt.show()
-
-
-
-
