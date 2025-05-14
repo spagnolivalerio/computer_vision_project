@@ -1,0 +1,3 @@
+Main code for the project. Here there are the first version of the rod, attempting
+to achieve the rod task by using hybrid approach from the related paper e some
+personal modifies.
