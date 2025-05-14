@@ -8,4 +8,9 @@ model = torchvision.models.segmentation.deeplabv3_resnet50(weights = weights)
 model.classifier[-1] = nn.Conv2d(model.classifier[-1].in_channels, 20, kernel_size=1)
 model = model.cuda()
 
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+optimizer = torch.optim.SGD(
+    model.parameters(), 
+    lr=0.01, 
+    momentum=0.9, 
+    weight_decay=1e-4
+)

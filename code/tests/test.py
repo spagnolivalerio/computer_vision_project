@@ -74,8 +74,8 @@ map = anomalies_map(prob)
 map = map.squeeze()
 masked_map = map.copy()
 #   masked_map[masked_map <= 0.45] = 0  # oppure np.nan per trasparenza
-
-plt.imshow(map, cmap="jet")
+mask = (map > 0.5*map.max())
+plt.imshow(prob[12].cpu(), cmap="jet")
 plt.colorbar()
 plt.axis("off")
 plt.show()
